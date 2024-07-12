@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Livewire\Component;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Component::macro('notify', function ($body, $title = null, $type = 'success') {
+            $this->dispatch('notify', [
+                'id' => uniqid(),
+                'body' => $body,
+                'title' => $title,
+                'type' => $type,
+            ]);
+        });
     }
 }
