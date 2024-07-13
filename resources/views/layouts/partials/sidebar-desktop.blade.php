@@ -12,7 +12,7 @@
                      <ul role="list" class="-mx-2 space-y-1">
                          <li>
                              <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
-                             <a href="#"
+                             <a href="{{route('dashboard')}}"
                                  class="flex p-2 text-sm font-semibold leading-6 text-indigo-600 rounded-md group gap-x-3 bg-gray-50">
                                  <svg class="w-6 h-6 text-indigo-600 shrink-0" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5" stroke="currentColor" aria-hidden="true">

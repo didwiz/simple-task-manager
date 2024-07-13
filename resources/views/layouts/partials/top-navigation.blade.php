@@ -1,4 +1,4 @@
-<div
+<div x-data="{ show: false }"
     class="sticky top-0 z-40 flex items-center h-16 px-4 bg-white border-b border-gray-200 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 sm:px-6 lg:px-8">
     <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
         <span class="sr-only">Open sidebar</span>
@@ -10,19 +10,24 @@
     <!-- Separator -->
     <div class="w-px h-6 bg-gray-200 lg:hidden" aria-hidden="true"></div>
 
-    <div class="flex self-stretch flex-1 gap-x-4 lg:gap-x-6">
-        <form class="relative flex flex-1" action="#" method="GET">
-            <label for="search-field" class="sr-only">Search</label>
-            <svg class="absolute inset-y-0 left-0 w-5 h-full text-gray-400 pointer-events-none" viewBox="0 0 20 20"
-                fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd"
-                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                    clip-rule="evenodd" />
-            </svg>
-            <input id="search-field"
-                class="block w-full h-full py-0 pl-8 pr-0 text-gray-900 border-0 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-                placeholder="Search..." type="search" name="search">
-        </form>
+    <div class="flex self-stretch justify-end flex-1 gap-x-4 lg:gap-x-6">
+        {{-- use alpine to dispatch to another component --}}
+        @if (request()->routeIs('*task-list'))
+            @php
+                $projects = \App\Models\Project::all();
+            @endphp
+            <form class="relative flex flex-1" action="#" method="GET" >
+                <div class="flex items-center">
+                    <x-heroicon-o-folder-open class="w-5 h-5" />
+                    <select class="border-transparent">
+                        <option>View Another Project</option>
+                        @foreach ($projects as $project)
+                            <option value="{{ $project->uuid }}" class="truncate">{{ $project->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </form>
+        @endif
         <div class="flex items-center gap-x-4 lg:gap-x-6">
             <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
                 <span class="sr-only">View notifications</span>
@@ -66,7 +71,8 @@
                       From: "transform opacity-100 scale-100"
                       To: "transform opacity-0 scale-95"
                   -->
-                <div class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+                <div x-show="show"
+                    class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
                     role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                     <!-- Active: "bg-gray-50", Not Active: "" -->
                     <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem"

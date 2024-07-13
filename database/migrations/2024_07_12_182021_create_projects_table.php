@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->uuid()->unique();
 
+            //although we dont really need the user for this project as there is no authorization
+            // added here in case i have time to add in authorization
             $table->foreignId('user_id')
                 ->constrained()
                 ->onDelete('cascade');

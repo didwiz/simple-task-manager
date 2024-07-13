@@ -12,6 +12,12 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -25,12 +31,12 @@
         <div class="lg:pl-72">
             @include('layouts.partials.top-navigation')
 
-            <main class="py-10">
+            <main class="py-10 mx-auto max-w-8xl sm:px-6 lg:px-8">
                 {{ $slot }}
             </main>
         </div>
     </div>
-
+    <x-flash-message />
 </body>
 
 </html>

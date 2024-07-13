@@ -1,6 +1,7 @@
 <?php
 
-use App\Livewire\Projects\Create as CreateProject;
+use App\Livewire\Projects\CreateProject;
+use App\Livewire\TaskBoards\TaskList;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -16,9 +17,9 @@ Route::view('profile', 'profile')
 
 
 Route::prefix('projects')->name('projects.')->group(function () {
-    Route::get('/create', CreateProject::class)
-        ->middleware(['auth'])
-        ->name('create');
-});
+    Route::get('/create', CreateProject::class)->name('create');
+
+    Route::get('{project:uuid}/tasks', TaskList::class)->name('task-list');
+})->middleware('auth');
 
 require __DIR__ . '/auth.php';

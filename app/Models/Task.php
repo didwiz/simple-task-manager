@@ -24,6 +24,10 @@ class Task extends Model
         'completed_at'
     ];
 
+    protected $cast = [
+        'due_date' => 'datetime'
+    ];
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
