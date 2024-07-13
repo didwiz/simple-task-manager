@@ -16,10 +16,10 @@ Route::view('profile', 'profile')
 
 
 
-Route::prefix('projects')->name('projects.')->group(function () {
+Route::middleware('auth')->prefix('projects')->name('projects.')->group(function () {
     Route::get('/create', CreateProject::class)->name('create');
 
     Route::get('{project:uuid}/tasks', TaskList::class)->name('task-list');
-})->middleware('auth');
+});
 
 require __DIR__ . '/auth.php';

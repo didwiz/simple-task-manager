@@ -1,13 +1,51 @@
-<div x-cloak class="px-6 py-4 mt-4">
-    <form wire:submit='save'>
+<div x-data="{
+    state: @entangle('state'),
+}" class="px-6 py-4 mt-4">
+
+
+    <div x-show="state!=='edit-form'">
+        <div class="space-y-5">
+            <header class="flex flex-col">
+                <small class="text-gray-400">#{{ $task->project->name }}</small>
+                <div class="flex flex-row justify-between mt-2">
+
+                    <h2 class="text-xl font-bold">{{ $task->name }}</h2>
+                    @if ($task->due_date)
+                        <p><small class="text-gray-400 ">Due on</small> {{ $task->due_date->format('d/m/Y') }}</p>
+                    @endif
+                </div>
+                <small class="text-sm ">In list: {{ $task->taskList->name }}</small>
+                <small class="capitalize">{{ $task->priority }} Priority</small>
+                <small class="capitalize">{{ $task->position }} Position</small>
+            </header>
+
+            <div>
+                <label class="text-gray-500">Description</label>
+                <div class="px-3 py-5 mt-1 border rounded-lg bg-gray-50">
+                    <p class="text-gray-600">{{ $task->description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between mt-6 mb-5 gap-x-6">
+            <x-danger-button class="ms-3">
+                {{ __('Delete') }}
+            </x-danger-button>
+            <button x-on:click="state='edit-form'"
+                class="flex items-center px-3 py-2 text-sm font-semibold text-gray-600 bg-white border border-gray-500 rounded-md shadow-sm hover:text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Edit
+                <div wire:loading wire:target="save" class="ml-2">
+                    <x-spinner-icon class="w-5 h-5" />
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <form x-show="state==='edit-form'" wire:submit='save'>
         <div class="space-y-12">
             <div class="grid grid-cols-1 pb-12 border-b gap-x-8 gap-y-10 border-gray-900/10 md:grid-cols-3">
-                <div>
-                    <h2 class="text-base font-semibold leading-7 text-gray-900">Create Task</h2>
-                    <p class="mt-1 text-sm leading-6 text-gray-600">Provide required information about this task.</p>
-                </div>
 
-                <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+                <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-6">
                     <div class="sm:col-span-6">
                         <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
                         <div class="mt-2">
@@ -44,8 +82,8 @@
                     </div>
 
                     <div class="sm:col-span-6">
-                        <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Position on
-                            List</label>
+                        <label for="name" class="block text-sm font-medium leading-6 text-gray-900">List
+                            Position</label>
                         <div class="mt-2">
                             <div class="mt-2">
                                 <x-text-input wire:model="form.position" type="number" min=1
@@ -75,7 +113,8 @@
         </div>
 
         <div class="flex items-center justify-between mt-6 gap-x-6">
-            <button type="button" x-data x-on:click="$dispatch('close');" class="px-3 py-2 text-sm font-semibold leading-6 text-gray-900 hover:border hover:rounded-md">Cancel</button>
+            <button type="button" x-data x-on:click="$dispatch('close');"
+                class="px-3 py-2 text-sm font-semibold leading-6 text-gray-900 hover:border hover:rounded-md">Cancel</button>
             <button type="submit"
                 class="flex items-center px-3 py-1 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Save
@@ -85,5 +124,4 @@
             </button>
         </div>
     </form>
-
 </div>

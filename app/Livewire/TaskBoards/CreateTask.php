@@ -3,31 +3,27 @@
 namespace App\Livewire\TaskBoards;
 
 use App\Livewire\Forms\TaskForm;
-use App\Models\Task;
-use Illuminate\Support\Str;
+use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
 class CreateTask extends Component
 {
     public TaskForm $form;
-    public string $projectId;
-    public string $selectedListId;
+    public int $projectId;
+
+    #[Reactive]
+    public int $selectedListId;
+
 
     public function save()
     {
-        $this->validate();
-
-        $project = Task::create(array_merge([
-            'uuid' => Str::uuid(),
-            'created_by' => auth()->id(),
+        $this->form->store([
             'project_id' => $this->projectId,
-            'task_list_id' => $this->selectedListId,
-        ], $this->form->all()));
+            'list_id' => $this->selectedListId
+        ]);
 
         $this->notify('Task has been created successfully.');
-        $this->dispatch('task-created');
-        $this->dispatch('close-form');
-
+        $this->dispatch('close-modal', 'add-task');
     }
 
     public function render()

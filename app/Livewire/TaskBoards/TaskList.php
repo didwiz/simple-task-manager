@@ -12,24 +12,33 @@ class TaskList extends Component
 
     public ?string $state;
 
-    public ?string $selectedListId;
+    public int $selectedListId = 0;
+    public int $selectedTaskId = 0;
 
 
-    #[On('close-form')]
-    public function resetState()
+    #[On('close-modal')]
+    public function resetComponent()
     {
-        $this->reset(['state','selectedListId']);
+        $this->reset(['state', 'selectedListId', 'selectedTaskId']);
+        $this->project = $this->project->refresh();
     }
 
-    public function addTask( $taskListId){
+    public function addTask($taskListId)
+    {
+        $this->resetComponent();
         $this->selectedListId = $taskListId;
-        $this->state = 'open-modal';
+        $this->dispatch('open-modal', 'add-task');
     }
 
-    #[On('edit-task')]
-    public function editTask($taskListId){
+    public function editTask($taskId, $taskListId)
+    {
+        $this->resetComponent();
+
         $this->selectedListId = $taskListId;
-        $this->state = 'open-modal';
+        $this->selectedTaskId = $taskId;
+
+        $this->state = 'edit-task';
+        $this->dispatch('open-modal', 'edit-task');
     }
 
 

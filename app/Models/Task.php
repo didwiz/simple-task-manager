@@ -24,8 +24,8 @@ class Task extends Model
         'completed_at'
     ];
 
-    protected $cast = [
-        'due_date' => 'datetime'
+    protected $casts = [
+        'due_date' => 'date'
     ];
 
     public function author(): BelongsTo

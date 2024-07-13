@@ -10,23 +10,9 @@
     <!-- Separator -->
     <div class="w-px h-6 bg-gray-200 lg:hidden" aria-hidden="true"></div>
 
-    <div class="flex self-stretch justify-end flex-1 gap-x-4 lg:gap-x-6">
-        {{-- use alpine to dispatch to another component --}}
+    <div class="flex justify-between flex-1 gap-x-4 lg:gap-x-6">
         @if (request()->routeIs('*task-list'))
-            @php
-                $projects = \App\Models\Project::all();
-            @endphp
-            <form class="relative flex flex-1" action="#" method="GET" >
-                <div class="flex items-center">
-                    <x-heroicon-o-folder-open class="w-5 h-5" />
-                    <select class="border-transparent">
-                        <option>View Another Project</option>
-                        @foreach ($projects as $project)
-                            <option value="{{ $project->uuid }}" class="truncate">{{ $project->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </form>
+            <x-project-navigation />
         @endif
         <div class="flex items-center gap-x-4 lg:gap-x-6">
             <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
@@ -61,17 +47,12 @@
                     </span>
                 </button>
 
-                <!--
-                    Dropdown menu, show/hide based on menu state.
-
-                    Entering: "transition ease-out duration-100"
-                      From: "transform opacity-0 scale-95"
-                      To: "transform opacity-100 scale-100"
-                    Leaving: "transition ease-in duration-75"
-                      From: "transform opacity-100 scale-100"
-                      To: "transform opacity-0 scale-95"
-                  -->
-                <div x-show="show"
+                <div x-show="show" x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 transform scale-90"
+                    x-transition:enter-end="opacity-100 transform scale-100"
+                    x-transition:leave="transition ease-in duration-300"
+                    x-transition:leave-start="opacity-100 transform scale-100"
+                    x-transition:leave-end="opacity-0 transform scale-90"
                     class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
                     role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                     <!-- Active: "bg-gray-50", Not Active: "" -->

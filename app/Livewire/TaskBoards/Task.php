@@ -3,15 +3,13 @@
 namespace App\Livewire\TaskBoards;
 
 use App\Models\Task as TaskModel;
+use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
 class Task extends Component
 {
+    #[Reactive]
     public TaskModel $task;
-
-    public function editTask(TaskModel $task){
-        $this->dispatch('edit-task',$task->id);
-    }
 
     public function render()
     {
