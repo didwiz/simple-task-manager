@@ -33,7 +33,7 @@
             </x-danger-button>
             <button x-on:click="state='edit-form'"
                 class="flex items-center px-3 py-2 text-sm font-semibold text-gray-600 bg-white border border-gray-500 rounded-md shadow-sm hover:text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                Edit
+                {{ __('EDIT') }}
                 <div wire:loading wire:target="save" class="ml-2">
                     <x-spinner-icon class="w-5 h-5" />
                 </div>

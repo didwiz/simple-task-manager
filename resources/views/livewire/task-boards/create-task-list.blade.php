@@ -31,7 +31,7 @@ new class extends Component {
         ]);
 
         $this->reset('name');
-        $this->dispatch('list-created');
+        $this->dispatch('close-modal');
         $this->closeForm();
     }
 
@@ -58,7 +58,7 @@ new class extends Component {
             <div>
                 <x-primary-button>{{ __('Save') }}</x-primary-button>
 
-                <x-action-message class="mr-3" on="list-created">
+                <x-action-message class="mt-1 mr-3" on="list-created">
                     {{ __('Saved.') }}
                 </x-action-message>
             </div>

@@ -16,16 +16,22 @@
             @forelse($project->taskLists as $taskList)
                 <div class="" wire:key="{{ $taskList->id }}">
                     <div class="flex flex-col p-2 border rounded-lg bg-gray-50" style="min-height:8rem;">
-                        <h3 class="flex items-center justify-between p-4 font-medium text-gray-500">
-                            <div>
-                                <span class="text-gray-600">{{ $taskList->name }}</span>
-                                [{{ $taskList->tasks->count() }}]
-                            </div>
-                            <button wire:click="addTask('{{ $taskList->id }}')"
-                                class="p-2 text-sm rounded hover:border hover:border-gray-500">
-                                Add Task
+                        <div class="w-full">
+                            <button class="flex justify-end w-full">
+                                <x-heroicon-o-x-circle class="text-gray-500 w-7 h-7 hover:text-gray-800" />
                             </button>
-                        </h3>
+                            <h3 class="flex items-center justify-between p-4 font-medium text-gray-500">
+                                <div>
+                                    <span class="text-gray-600">{{ $taskList->name }}</span>
+                                    [{{ $taskList->tasks->count() }}]
+                                </div>
+                                <button wire:click="addTask('{{ $taskList->id }}')"
+                                    class="p-2 text-sm rounded hover:border hover:border-gray-500">
+                                    Add Task
+                                </button>
+                            </h3>
+
+                        </div>
 
                         <ul x-sort x-sort:group="{{ $project->id }}">
                             @foreach ($taskList->tasks as $task)
