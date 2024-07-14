@@ -22,7 +22,7 @@
                             </button>
                             <h3 class="flex items-center justify-between p-4 font-medium text-gray-500">
                                 <div>
-                                    <span class="text-gray-600">{{ $taskList->name }}</span>
+                                    <span class="font-semibold text-gray-600 capitalize">{{ $taskList->name }}</span>
                                     [{{ $taskList->tasks->count() }}]
                                 </div>
                                 <button wire:click="addTask('{{ $taskList->id }}')"

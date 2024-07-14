@@ -11,10 +11,10 @@
     <div class="w-px h-6 bg-gray-200 lg:hidden" aria-hidden="true"></div>
 
     <div class="flex justify-between flex-1 gap-x-4 lg:gap-x-6">
-        @if (request()->routeIs('*task-list'))
+        <div>
             <x-project-navigation />
-        @endif
-        <div class="flex items-center gap-x-4 lg:gap-x-6">
+        </div>
+        <div class="flex items-center self-end gap-x-4 lg:gap-x-6">
             <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
                 <span class="sr-only">View notifications</span>
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
