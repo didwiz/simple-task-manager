@@ -19,12 +19,16 @@
                 <small class="capitalize">{{ $task->position }} Position</small>
             </header>
 
-            <div>
-                <label class="text-gray-500">Description</label>
-                <div class="px-3 py-5 mt-1 border rounded-lg bg-gray-50">
-                    <p class="text-gray-600">{{ $task->description }}</p>
+            @if ($task->description)
+                <div>
+                    <label class="text-gray-500">Description</label>
+                    <div class="px-3 py-5 mt-1 border rounded-lg bg-gray-50">
+                        <p class="text-gray-600">{{ $task->description }}</p>
+                    </div>
                 </div>
-            </div>
+                @else
+                <hr class="my-5">
+            @endif
         </div>
 
         <div class="flex items-center justify-between mt-6 mb-5 gap-x-6">

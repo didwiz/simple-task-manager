@@ -17,7 +17,7 @@ class TaskForm extends Form
     #[Validate('required|min:5')]
     public $name = '';
 
-    #[Validate('sometimes|min:5')]
+    #[Validate('sometimes')]
     public $description = '';
 
     #[Validate('sometimes')]
