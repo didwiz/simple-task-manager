@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Projects;
 
+use App\Events\ProjectCreated;
 use App\Livewire\Forms\ProjectForm;
 use App\Models\Project;
 use Illuminate\Support\Str;
@@ -20,9 +21,10 @@ class CreateProject extends Component
             'user_id' => auth()->id()
         ], $this->form->all()));
 
-        $this->notify('Project has been created successfully.');
 
-        //redirect to kanban view
+        event(new ProjectCreated($project));
+
+        $this->notify('Project has been created successfully.');
         $this->redirectRoute('projects.task-list', [$project->uuid]);
     }
 

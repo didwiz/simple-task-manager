@@ -21,7 +21,8 @@ class Task extends Model
         'created_by',
         'task_list_id',
         'position',
-        'completed_at'
+        'completed_at',
+        'created_by'
     ];
 
     protected $casts = [

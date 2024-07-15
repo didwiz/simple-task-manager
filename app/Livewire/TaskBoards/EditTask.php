@@ -25,13 +25,21 @@ class EditTask extends Component
         }
     }
 
-
     public function save()
     {
         $task = $this->form->update();
 
         $this->notify('Task has been edited successfully.');
         $this->dispatch('task-edited', $task->id);
+        $this->dispatch('close');
+    }
+
+    public function delete(Task $task)
+    {
+        $this->form->delete();
+
+        $this->notify('Task has been deleted successfully.');
+        $this->dispatch('task-deleted', ['task_id' => $task->id, 'list_id' => $task->task_list_id]);
         $this->dispatch('close');
     }
 

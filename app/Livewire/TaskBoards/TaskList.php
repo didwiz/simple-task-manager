@@ -70,6 +70,7 @@ class TaskList extends Component
     public function deleteTaskList(ModelsTaskList $taskList)
     {
         $taskList->delete();
+
         $selectedTaskListID = $taskList->id;
         $this->taskLists = collect($this->taskLists)->reject(function ($taskList) use ($selectedTaskListID) {
             return $taskList['id'] === $selectedTaskListID;
@@ -105,8 +106,25 @@ class TaskList extends Component
         }
     }
 
-    public function deleteTask($taskId)
+
+    #[On('task-deleted')]
+    public function deleteTask(array $data)
     {
+        //This would be place to do some authorization before deleting
+        $deletedTaskListId = $data['list_id'];
+        $deletedTaskId = $data['task_id'];
+        foreach ($this->taskLists as &$taskList) {
+            if ($taskList['id'] === $deletedTaskListId) {
+                // find task in array and swap out with updated info
+                foreach ($taskList['tasks'] as $index => $task) {
+                    if ($task['id'] === $deletedTaskId) {
+                        unset($taskList['tasks'][$index]);
+                        return;
+                    }
+                }
+                return;
+            }
+        }
     }
 
 
@@ -152,19 +170,13 @@ class TaskList extends Component
 
             //auto-set first 3 task as high priority
             //users should also be allowed to set this manually
-            if($position >= $min && $position <= $max ){
+            if ($position >= $min && $position <= $max) {
                 $data['priority'] = TaskPriority::HIGH;
             }
 
             $task->update($data);
         }
     }
-
-    public function sortLists(ModelsTaskList $taskList, $position)
-    {
-      //logic to handle list sorting
-    }
-
 
     public function render()
     {

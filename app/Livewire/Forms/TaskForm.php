@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms;
 
 use App\Enums\TaskPriority;
+use App\Events\ProjectCreated;
 use App\Models\Task;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -34,6 +35,8 @@ class TaskForm extends Form
     #[Validate('sometimes')]
     public $priority = TaskPriority::LOW;
 
+    public $created_by = null;
+
     public function setTask(Task $task)
     {
         $this->task = $task;
@@ -51,12 +54,12 @@ class TaskForm extends Form
     {
         $this->project_id = $data['project_id'];
         $this->task_list_id = $data['list_id'];
+        $this->created_by = auth()->id();
 
         $this->validate();
 
         $task =  Task::create(array_merge([
             'uuid' => Str::uuid(),
-            'created_by' => auth()->id(),
         ], $this->all()));
 
         $this->reset();
@@ -74,5 +77,11 @@ class TaskForm extends Form
         $this->reset();
 
         return $task;
+    }
+
+    public function delete()
+    {
+        $this->task->delete();
+        $this->reset();
     }
 }

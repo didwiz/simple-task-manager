@@ -6,8 +6,8 @@
             </h2>
         </div>
         <div class="flex gap-3 mt-4 md:ml-4 md:mt-0">
-            <x-secondary-button>{{ __('Edit') }}</x-secondary-button>
-            <x-primary-button wire:click="addTask(0)">{{ __('Add Task') }}</x-primary-button>
+            {{-- <x-secondary-button>{{ __('Edit') }}</x-secondary-button> --}}
+            {{-- <x-primary-button wire:click="addTask(0)">{{ __('Add Task') }}</x-primary-button> --}}
         </div>
     </div>
 
@@ -19,13 +19,9 @@
             console.log(taskId, position, currentListId)
             $wire.sortTasks(taskId, position, currentListId);
         },
-        sortLists: function(item, position) {
-            console.log(item, position);
-            $wire.sortLists(item, position);
-        }
     }" wire:ignore class="h-screen mt-8 overflow-x-auto">
         <div class="flex items-start h-screen gap-4 overflow-x-auto">
-            <div x-sort="sortLists" x-sort:group="list" class="grid grid-flow-col auto-cols-[20rem] gap-4">
+            <div x-sort x-sort:group="list" class="grid grid-flow-col auto-cols-[20rem] gap-4">
                 <template x-show="taskLists.length" x-for="(taskList,index) in taskLists" :key="'list-' + taskList.id"
                     wire:key="'list-' + taskList.id">
                     <div x-sort:item="taskList.id" class="">

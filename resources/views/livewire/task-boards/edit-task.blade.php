@@ -28,7 +28,7 @@
         </div>
 
         <div class="flex items-center justify-between mt-6 mb-5 gap-x-6">
-            <x-danger-button class="ms-3">
+            <x-danger-button wire:click="delete({{ $task->id }})" class="ms-3">
                 {{ __('Delete') }}
             </x-danger-button>
             <button x-on:click="state='edit-form'"
