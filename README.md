@@ -25,8 +25,21 @@ This is a simple task management app with the following features. Kindly note th
  - Tests for tasks create & edit.
 
 ## Deployment
--You can setup this project using docker by doing the follow;
--run seeders with php artisan db:seed
+-You can setup this project using Docker by doing the following;
+0. Ensure you have installed docker and it's up and running.
+1. Run `sail composer install` & `sail npm install`
+2. Ensure you have created a mysql database and that you have updated the `.env` file.
+3. Run migration via `sail artisan migrate:fresh --seed`. This would run the migration files and also run the necessary seeders.
+4. Ensure you set up your `.env` with custom port parameters for docker if necessary. These are part of the commonly used port parameters `APP_PORT=8081` & `FORWARD_DB_PORT=3307`
+5. Build the app by running `sail npm run dev` or `sail npm run build`
+6. `docker-compose.yml` contains the standard docker configurations for this project.
+
+-You can also setup the project without Docker.
+1. Run `composer install` & `npm install`
+2.  Ensure you have created a mysql database and that you have updated the `.env` file.
+3. Run migration via `php artisan migrate:fresh --seed`. This would run the migration files and also run the necessary seeders.
+4. Build the app by running `npm run dev` or `npm run build`
+
 
 ## Video
 You may also watch the [demo here](https://bootcamp.laravel.com).

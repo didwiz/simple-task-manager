@@ -24,7 +24,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->string('name');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->string('priority')->default('low');
             $table->string('status')->default('open');
             $table->integer('position');

@@ -17,7 +17,7 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
         User::factory(2)->create()->each(function ($user) {
-            Project::factory(5)->create(['user_id' => $user->id])->each(function ($project) {
+            Project::factory(3)->create(['user_id' => $user->id])->each(function ($project) {
                 // Create default task lists
                 $taskLists = ['todo', 'pending', 'in-progress', 'review', 'done'];
                 foreach ($taskLists as $index => $taskListName) {

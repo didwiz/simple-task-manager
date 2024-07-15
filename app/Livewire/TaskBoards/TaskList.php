@@ -97,7 +97,8 @@ class TaskList extends Component
                 // find task in array and swap out with updated info
                 foreach ($taskList['tasks'] as $index => $task) {
                     if ($task['id'] === $editedTask->id) {
-                        $taskList['tasks'][$index] = $editedTask->toArray();
+                        $editedTask = array_merge($editedTask->toArray(),['due_date'=>$editedTask->due_date->format('d/m/Y')]);
+                        $taskList['tasks'][$index] = $editedTask;
                         return;
                     }
                 }

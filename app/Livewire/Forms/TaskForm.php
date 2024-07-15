@@ -17,7 +17,7 @@ class TaskForm extends Form
     #[Validate('required|min:5')]
     public $name = '';
 
-    #[Validate('required|min:5')]
+    #[Validate('sometimes|min:5')]
     public $description = '';
 
     #[Validate('sometimes')]
@@ -48,6 +48,7 @@ class TaskForm extends Form
         $this->project_id = $task->project_id;
         $this->task_list_id = $task->task_list_id;
         $this->priority = $task->priority;
+        $this->created_by = $task->created_by;
     }
 
     public function store(array $data): Task
