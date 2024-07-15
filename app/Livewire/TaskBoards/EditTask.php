@@ -31,6 +31,7 @@ class EditTask extends Component
 
         $this->notify('Task has been edited successfully.');
         $this->dispatch('task-edited', $task->id);
+
         $this->dispatch('close');
     }
 
@@ -40,7 +41,15 @@ class EditTask extends Component
 
         $this->notify('Task has been deleted successfully.');
         $this->dispatch('task-deleted', ['task_id' => $task->id, 'list_id' => $task->task_list_id]);
+
+
         $this->dispatch('close');
+    }
+
+    public function closeEditSection()
+    {
+        $this->reset('state');
+        $this->task = $this->task->refresh();
     }
 
 

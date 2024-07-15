@@ -75,8 +75,6 @@ class TaskForm extends Form
         $this->validate();
         $task->update($this->all());
 
-        $this->reset();
-
         return $task;
     }
 

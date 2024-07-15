@@ -26,7 +26,7 @@
                         <p class="text-gray-600">{{ $task->description }}</p>
                     </div>
                 </div>
-                @else
+            @else
                 <hr class="my-5">
             @endif
         </div>
@@ -117,7 +117,7 @@
         </div>
 
         <div class="flex items-center justify-between mt-6 gap-x-6">
-            <button type="button" x-data x-on:click="$dispatch('close');"
+            <button type="button" x-data x-on:click="$wire.closeEditSection()"
                 class="px-3 py-2 text-sm font-semibold leading-6 text-gray-900 hover:border hover:rounded-md">Cancel</button>
             <button type="submit"
                 class="flex items-center px-3 py-1 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
