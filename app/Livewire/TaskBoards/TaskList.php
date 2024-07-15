@@ -2,7 +2,10 @@
 
 namespace App\Livewire\TaskBoards;
 
+use App\Enums\TaskPriority;
 use App\Models\Project;
+use App\Models\Task;
+use App\Models\TaskList as ModelsTaskList;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -15,30 +18,151 @@ class TaskList extends Component
     public int $selectedListId = 0;
     public int $selectedTaskId = 0;
 
+    public array $taskLists = [];
 
-    #[On('close-modal')]
-    public function resetComponent()
+    public function mount(Project $project)
     {
-        $this->reset(['state', 'selectedListId', 'selectedTaskId']);
-        $this->project = $this->project->refresh();
+        $this->init($project);
     }
 
-    public function addTask($taskListId)
+    private function init(Project $project)
     {
-        $this->resetComponent();
+        $project->load([
+            'taskLists' => function ($query) {
+                $query->orderBy('position')->with([
+                    'tasks' => function ($query) {
+                        $query->orderBy('position');
+                    }
+                ]);
+            }
+        ]);
+
+        $this->project = $project;
+        $this->taskLists = $this->project->taskLists->map(function ($taskList) {
+            return [
+                'id' => $taskList->id,
+                'name' => $taskList->name,
+                'position' => $taskList->position,
+                'tasks' => $taskList->tasks->map(function ($task) {
+                    return [
+                        'id' => $task->id,
+                        'uuid' => $task->uuid,
+                        'name' => $task->name,
+                        'description' => $task->description,
+                        'priority' => $task->priority,
+                        'status' => $task->status,
+                        'position' => $task->position,
+                        'due_date' => $task->due_date?->format('d/m/Y'),
+                        'created_by' => $task->created_by,
+                    ];
+                })->toArray(),
+            ];
+        })->toArray();
+    }
+
+    #[On('task-list-created')]
+    public function addTaskList(ModelsTaskList $taskList)
+    {
+        $addedTaskList = $taskList->toArray();
+        $this->taskLists[]  = $addedTaskList;
+    }
+
+    public function deleteTaskList(ModelsTaskList $taskList)
+    {
+        $taskList->delete();
+        $selectedTaskListID = $taskList->id;
+        $this->taskLists = collect($this->taskLists)->reject(function ($taskList) use ($selectedTaskListID) {
+            return $taskList['id'] === $selectedTaskListID;
+        })->toArray();
+    }
+
+    #[On('task-created')]
+    public function addTask(Task $task)
+    {
+        foreach ($this->taskLists as &$taskList) {
+            if ($taskList['id'] === $task->task_list_id) {
+                // Add the new task to the tasks array of the appropriate task list
+                $taskList['tasks'][] = $task->toArray();
+                return;
+            }
+        }
+    }
+
+    #[On('task-edited')]
+    public function editTask(Task $editedTask)
+    {
+        foreach ($this->taskLists as &$taskList) {
+            if ($taskList['id'] === $editedTask->task_list_id) {
+                // find task in array and swap out with updated info
+                foreach ($taskList['tasks'] as $index => $task) {
+                    if ($task['id'] === $editedTask->id) {
+                        $taskList['tasks'][$index] = $editedTask->toArray();
+                        return;
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+    public function deleteTask($taskId)
+    {
+    }
+
+
+    #[On('show-edit-modal')]
+    public function showEditModal(Task $task)
+    {
+        $this->selectedTaskId = $task->id;
+        $this->state = 'edit-task';
+        $this->dispatch('open-modal', 'edit-task');
+    }
+
+    #[On('show-add-modal')]
+    public function showAddTaskModal($taskListId)
+    {
         $this->selectedListId = $taskListId;
         $this->dispatch('open-modal', 'add-task');
     }
 
-    public function editTask($taskId, $taskListId)
+    #[On('show-delete-modal')]
+    public function showDeleteTaskListModal($taskListId)
     {
-        $this->resetComponent();
-
         $this->selectedListId = $taskListId;
-        $this->selectedTaskId = $taskId;
+        $this->dispatch('open-modal', 'delete-task');
+    }
 
-        $this->state = 'edit-task';
-        $this->dispatch('open-modal', 'edit-task');
+    public function sortTasks(Task $task, $position, $currentTaskListId)
+    {
+        $task->update(['position' => $position, 'task_list_id' => $currentTaskListId]);
+
+        $currentListTasks = Task::where('task_list_id', $currentTaskListId)
+            ->where('id', '!=', $task->id)
+            ->orderBy('position')
+            ->get();
+
+        // place the moved task into the new position
+        $currentListTasks->splice($position, 0, [$task]);
+
+        // Update position of the remaining tasks to respect added task
+        foreach ($currentListTasks as $index => $task) {
+            $data = ['position' => $position = $index + 1];
+            $min = 0;
+            $max = 3;
+
+            //auto-set first 3 task as high priority
+            //users should also be allowed to set this manually
+            if($position >= $min && $position <= $max ){
+                $data['priority'] = TaskPriority::HIGH;
+            }
+
+            $task->update($data);
+        }
+    }
+
+    public function sortLists(ModelsTaskList $taskList, $position)
+    {
+      //logic to handle list sorting
     }
 
 

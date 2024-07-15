@@ -17,13 +17,14 @@ class CreateTask extends Component
 
     public function save()
     {
-        $this->form->store([
+        $task = $this->form->store([
             'project_id' => $this->projectId,
             'list_id' => $this->selectedListId
         ]);
 
         $this->notify('Task has been created successfully.');
-        $this->dispatch('close-modal', 'add-task');
+        $this->dispatch('task-created', $task->id);
+        $this->dispatch('close');
     }
 
     public function render()

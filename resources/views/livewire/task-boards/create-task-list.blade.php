@@ -8,7 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public string $name = '';
+    public string $name = 'Default';
     public Project $project;
 
     /**
@@ -25,17 +25,19 @@ new class extends Component {
             throw $e;
         }
 
-        $this->project->taskLists()->create([
+        $position = $this->project->taskLists->max('position');
+        $taskList = $this->project->taskLists()->create([
             'name' => $this->name,
-            'position' => 0,
+            'position' => $position > 0 ? $position + 1 : 0,
         ]);
 
         $this->reset('name');
-        $this->dispatch('close-modal');
+        $this->dispatch('task-list-created', $taskList->id);
         $this->closeForm();
     }
 
-    public function closeForm(){
+    public function closeForm()
+    {
         $this->dispatch('close-form');
     }
 }; ?>
@@ -50,7 +52,7 @@ new class extends Component {
     <form wire:submit="createTaskList" class="mt-6 space-y-6">
         <div>
             <x-input-label for="list_name" :value="__('List Name')" />
-            <x-text-input wire:model="name" class="block w-full mt-1" />
+            <x-text-input wire:model="name" class="w-full mt-1" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 

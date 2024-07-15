@@ -10,11 +10,8 @@ class EditTask extends Component
 {
     public TaskForm $form;
 
-    public int $projectId;
-
     public int $selectedTaskId;
 
-    public int $selectedListId;
     public Task $task;
 
     public string $state;
@@ -31,10 +28,11 @@ class EditTask extends Component
 
     public function save()
     {
-        $this->form->update();
+        $task = $this->form->update();
 
         $this->notify('Task has been edited successfully.');
-        $this->dispatch('close-modal', 'edit-task');
+        $this->dispatch('task-edited', $task->id);
+        $this->dispatch('close');
     }
 
 

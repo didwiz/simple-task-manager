@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+use App\Enums\TaskPriority;
 use App\Models\Task;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -18,7 +19,7 @@ class TaskForm extends Form
     #[Validate('required|min:5')]
     public $description = '';
 
-    #[Validate('sometimes|required')]
+    #[Validate('sometimes')]
     public $due_date = null;
 
     #[Validate('required')]
@@ -30,8 +31,8 @@ class TaskForm extends Form
     #[Validate('sometimes|required|numeric')]
     public $task_list_id;
 
-    #[Validate('required')]
-    public $priority;
+    #[Validate('sometimes')]
+    public $priority = TaskPriority::LOW;
 
     public function setTask(Task $task)
     {
@@ -46,26 +47,32 @@ class TaskForm extends Form
         $this->priority = $task->priority;
     }
 
-    public function store(array $data): void
+    public function store(array $data): Task
     {
         $this->project_id = $data['project_id'];
         $this->task_list_id = $data['list_id'];
 
         $this->validate();
 
-        Task::create(array_merge([
+        $task =  Task::create(array_merge([
             'uuid' => Str::uuid(),
             'created_by' => auth()->id(),
         ], $this->all()));
 
         $this->reset();
+
+        return $task;
     }
 
-    public function update(): void
+    public function update(): ?Task
     {
+        $task = $this->task;
+
         $this->validate();
-        $this->task->update($this->all());
+        $task->update($this->all());
 
         $this->reset();
+
+        return $task;
     }
 }
