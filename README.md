@@ -42,4 +42,4 @@ This is a simple task management app with the following features. Kindly note th
 
 
 ## Video
-You may also watch the [demo here](https://bootcamp.laravel.com).
+You may also watch the [demo here](https://www.loom.com/share/279aac3f3ecc41c2b1bbce256c5b22a4?sid=94d87249-0a82-43b0-b3f8-77115a87647e).
